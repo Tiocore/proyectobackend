@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ event.name }}</title>
+</head>
+<body>
+
+    <h1>{{ event.name }}</h1>
+
+    <p>{{ event.description }}</p>
+
+    <p>
+        <strong>Lugar:</strong>
+        {{ event.location }}
+    </p>
+
+    <p>
+        <strong>Fecha:</strong>
+        {{ event.date }}
+    </p>
+
+    <p>
+        <strong>Precio:</strong>
+        ${{ event.price }}
+    </p>
+
+    <p>
+        <strong>Capacidad:</strong>
+        {{ event.capacity }}
+    </p>
+    {% if poll %}
+
+        <hr>
+
+        <h2>{{ poll.question }}</h2>
+
+        <form method="POST">
+
+    {% csrf_token %}
+
+    {% for choice in poll.choice_set.all %}
+
+        <p>
+            <input
+                type="radio"
+                name="choice"
+                value="{{ choice.id }}"
+                id="choice{{ choice.id }}"
+            >
+
+            <label for="choice{{ choice.id }}">
+                {{ choice.choice_text }}
+            </label>
+        </p>
+
+    {% endfor %}
+
+    <button type="submit">Votar</button>
+
+</form>
+
+<a href="{% url 'event_results' event.id %}">
+    Ver resultados
+</a>
+
+    
+
+{% endif %}
+    
+            
+    
+    
+    <a href="/events/">Volver a eventos</a>
+
+</body>
+</html>

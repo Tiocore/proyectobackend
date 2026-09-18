@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultados</title>
+</head>
+<body>
+
+    <h1>Resultados</h1>
+
+    {% if poll %}
+
+        <h2>{{ poll.question }}</h2>
+
+        {% for choice in poll.choice_set.all %}
+
+            <p>
+                {{ choice.choice_text }} → {{ choice.votes }} votos
+            </p>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>Este evento no tiene una encuesta.</p>
+
+    {% endif %}
+
+    <a href="/events/{{ event.id }}/">
+        Volver al evento
+    </a>
+
+</body>
+</html>
