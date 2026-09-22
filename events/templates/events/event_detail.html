@@ -8,6 +8,13 @@
 
     <h1>{{ event.name }}</h1>
 
+    {% if event.image %}
+    <img
+        src="{{ event.image.url }}"
+        alt="{{ event.name }}"
+        width="500"
+    >
+{% endif %}
     <p>{{ event.description }}</p>
 
     <p>

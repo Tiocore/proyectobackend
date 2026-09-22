@@ -11,6 +11,14 @@
     {% for event in events %}
 
         <div>
+            {% if event.image %}
+    <img
+        src="{{ event.image.url }}"
+        alt="{{ event.name }}"
+        width="300"
+    >
+    {% endif %} 
+
             <h2>
     <a href="{% url 'event_detail' event.id %}">
         {{ event.name }}

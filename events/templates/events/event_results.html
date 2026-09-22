@@ -2,23 +2,36 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Resultados</title>
+    <title>Resultados - {{ event.name }}</title>
 </head>
 <body>
 
-    <h1>Resultados</h1>
+    <h1>Resultados de la encuesta</h1>
+
+    <h2>{{ event.name }}</h2>
 
     {% if poll %}
 
-        <h2>{{ poll.question }}</h2>
+        <h3>{{ poll.question }}</h3>
 
         {% for choice in poll.choice_set.all %}
 
-            <p>
-                {{ choice.choice_text }} → {{ choice.votes }} votos
-            </p>
+            <div>
+                <p>
+                    <strong>{{ choice.choice_text }}</strong>
+                </p>
+
+                <p>
+                    {{ choice.votes }} votos -
+                    {{ choice.percentage }}%
+                </p>
+            </div>
+
+            <hr>
 
         {% endfor %}
+
+        <h3>Total de votos: {{ total_votes }}</h3>
 
     {% else %}
 
@@ -26,7 +39,9 @@
 
     {% endif %}
 
-    <a href="/events/{{ event.id }}/">
+    <br>
+
+    <a href="{% url 'event_detail' event.id %}">
         Volver al evento
     </a>
 
