@@ -1,0 +1,13 @@
+# Entornos virtuales
+.venv/
+.venv-1/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Django
+staticfiles/
+
+# Variables de entorno
+.env
