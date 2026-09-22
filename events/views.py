@@ -48,15 +48,6 @@ def event_results(request, event_id):
             choice.votes
             for choice in poll.choice_set.all()
         )
-        
-        for choice in poll.choice_set.all():
-            if total_votes > 0:
-                choice.percentage = round(
-                    (choice.votes / total_votes) * 100,
-                    2
-                )
-            else:
-                choice.percentage = 0
 
     return render(
         request,
