@@ -41,13 +41,31 @@ def event_results(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     poll = Poll.objects.filter(event=event).first()
 
+    choices = []
     total_votes = 0
 
     if poll:
+        choices_queryset = poll.choice_set.all()
+
         total_votes = sum(
             choice.votes
-            for choice in poll.choice_set.all()
+            for choice in choices_queryset
         )
+
+        for choice in choices_queryset:
+            if total_votes > 0:
+                percentage = round(
+                    (choice.votes / total_votes) * 100,
+                    2
+                )
+            else:
+                percentage = 0
+
+            choices.append({
+                "choice_text": choice.choice_text,
+                "votes": choice.votes,
+                "percentage": percentage,
+            })
 
     return render(
         request,
@@ -55,6 +73,7 @@ def event_results(request, event_id):
         {
             "event": event,
             "poll": poll,
+            "choices": choices,
             "total_votes": total_votes,
         }
     )
