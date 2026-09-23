@@ -11,3 +11,6 @@ staticfiles/
 
 # Variables de entorno
 .env
+
+# Base de datos local
+db.sqlite3
