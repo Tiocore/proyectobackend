@@ -1,84 +1,72 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ event.name }}</title>
-</head>
-<body>
+{% extends "events/base.html" %}
 
-    <h1>{{ event.name }}</h1>
+{% block title %}{{ event.name }} | TicketHub{% endblock %}
 
-    {% if event.image %}
-    <img
-        src="{{ event.image.url }}"
-        alt="{{ event.name }}"
-        width="500"
-    >
-{% endif %}
-    <p>{{ event.description }}</p>
+{% block content %}
+<section class="detail-section container">
+    <a class="back-link" href="{% url 'event_list' %}">← Volver a eventos</a>
 
-    <p>
-        <strong>Lugar:</strong>
-        {{ event.location }}
-    </p>
+    <div class="detail-card">
+        <div class="detail-image">
+            {% if event.image %}
+                <img src="{{ event.image.url }}" alt="{{ event.name }}">
+            {% else %}
+                <div class="image-placeholder large"><span>EVENTO</span></div>
+            {% endif %}
+        </div>
 
-    <p>
-        <strong>Fecha:</strong>
-        {{ event.date }}
-    </p>
+        <div class="detail-content">
+            <span class="tag">Evento</span>
+            <h1>{{ event.name }}</h1>
+            <p class="detail-description">{{ event.description }}</p>
 
-    <p>
-        <strong>Precio:</strong>
-        ${{ event.price }}
-    </p>
+            <div class="info-grid">
+                <div class="info-box">
+                    <span>📍 Lugar</span>
+                    <strong>{{ event.location }}</strong>
+                </div>
+                <div class="info-box">
+                    <span>📅 Fecha</span>
+                    <strong>{{ event.date|date:"d/m/Y H:i" }}</strong>
+                </div>
+                <div class="info-box">
+                    <span>🎟️ Precio</span>
+                    <strong>${{ event.price }}</strong>
+                </div>
+                <div class="info-box">
+                    <span>👥 Capacidad</span>
+                    <strong>{{ event.capacity }} personas</strong>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <p>
-        <strong>Capacidad:</strong>
-        {{ event.capacity }}
-    </p>
     {% if poll %}
+    <section class="poll-card">
+        <div class="poll-heading">
+            <span class="eyebrow">ENCUESTA</span>
+            <h2>{{ poll.question }}</h2>
+            <p>Selecciona una alternativa y registra tu voto.</p>
+        </div>
 
-        <hr>
+        <form method="POST" class="poll-form">
+            {% csrf_token %}
+            <div class="choices">
+                {% for choice in poll.choice_set.all %}
+                <label class="choice">
+                    <input type="radio" name="choice" value="{{ choice.id }}" required>
+                    <span>{{ choice.choice_text }}</span>
+                </label>
+                {% endfor %}
+            </div>
 
-        <h2>{{ poll.question }}</h2>
+            <button class="button" type="submit">Registrar voto</button>
+        </form>
 
-        <form method="POST">
-
-    {% csrf_token %}
-
-    {% for choice in poll.choice_set.all %}
-
-        <p>
-            <input
-                type="radio"
-                name="choice"
-                value="{{ choice.id }}"
-                id="choice{{ choice.id }}"
-            >
-
-            <label for="choice{{ choice.id }}">
-                {{ choice.choice_text }}
-            </label>
-        </p>
-
-    {% endfor %}
-
-    <button type="submit">Votar</button>
-
-</form>
-
-<a href="{% url 'event_results' event.id %}">
-    Ver resultados
-</a>
-
-    
-
-{% endif %}
-    
-            
-    
-    
-    <a href="/events/">Volver a eventos</a>
-
-</body>
-</html>
+        <a class="results-link" href="{% url 'event_results' event.id %}">
+            Ver resultados de la encuesta →
+        </a>
+    </section>
+    {% endif %}
+</section>
+{% endblock %}

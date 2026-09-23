@@ -1,56 +1,67 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Eventos</title>
-</head>
-<body>
+{% extends "events/base.html" %}
 
-    <h1>Lista de eventos</h1>
+{% block title %}Eventos | TicketHub{% endblock %}
 
-    {% for event in events %}
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <span class="eyebrow">ENTRADAS Y EVENTOS</span>
+        <h1>Encuentra tu próximo evento</h1>
+        <p>Revisa los eventos disponibles, conoce sus detalles y participa en sus encuestas.</p>
+    </div>
+</section>
 
+<section class="events-section container">
+    <div class="section-heading">
         <div>
-            {% if event.image %}
-    <img
-        src="{{ event.image.url }}"
-        alt="{{ event.name }}"
-        width="300"
-    >
-    {% endif %} 
-
-            <h2>
-    <a href="{% url 'event_detail' event.id %}">
-        {{ event.name }}
-    </a>
-            </h2>
-
-            <p>{{ event.description }}</p>
-
-            <p>
-                <strong>Lugar:</strong>
-                {{ event.location }}
-            </p>
-
-            <p>
-                <strong>Fecha:</strong>
-                {{ event.date }}
-            </p>
-
-            <p>
-                <strong>Precio:</strong>
-                ${{ event.price }}
-            </p>
-
-            <p>
-                <strong>Capacidad:</strong>
-                {{ event.capacity }}
-            </p>
+            <span class="eyebrow">CATÁLOGO</span>
+            <h2>Eventos disponibles</h2>
         </div>
+        <span class="event-count">{{ events|length }} evento{{ events|length|pluralize }}</span>
+    </div>
 
-        <hr>
+    {% if events %}
+    <div class="event-grid">
+        {% for event in events %}
+        <article class="event-card">
+            <div class="event-image">
+                {% if event.image %}
+                    <img src="{{ event.image.url }}" alt="{{ event.name }}">
+                {% else %}
+                    <div class="image-placeholder">
+                        <span>EVENTO</span>
+                    </div>
+                {% endif %}
+            </div>
 
-    {% endfor %}
+            <div class="event-card-body">
+                <span class="tag">Evento</span>
+                <h3>{{ event.name }}</h3>
+                <p class="description">{{ event.description|truncatechars:115 }}</p>
 
-</body>
-</html>
+                <div class="event-meta">
+                    <span>📍 {{ event.location }}</span>
+                    <span>📅 {{ event.date|date:"d/m/Y H:i" }}</span>
+                </div>
+
+                <div class="card-footer">
+                    <div>
+                        <small>Desde</small>
+                        <strong>${{ event.price }}</strong>
+                    </div>
+                    <a class="button button-small" href="{% url 'event_detail' event.id %}">
+                        Ver evento
+                    </a>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <h3>No hay eventos disponibles</h3>
+        <p>Cuando se agreguen eventos aparecerán aquí.</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

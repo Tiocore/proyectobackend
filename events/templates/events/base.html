@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TicketHub{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'events/css/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container nav">
+            <a class="brand" href="{% url 'event_list' %}">
+                <span class="brand-mark">T</span>
+                <span>TicketHub</span>
+            </a>
+            <nav>
+                <a href="{% url 'event_list' %}">Eventos</a>
+                <a href="/admin/" class="nav-admin">Administración</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>TicketHub · Compra y descubre tus próximos eventos</p>
+        </div>
+    </footer>
+</body>
+</html>

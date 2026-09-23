@@ -1,49 +1,42 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Resultados - {{ event.name }}</title>
-</head>
-<body>
+{% extends "events/base.html" %}
 
-    <h1>Resultados de la encuesta</h1>
+{% block title %}Resultados | {{ event.name }}{% endblock %}
 
-    <h2>{{ event.name }}</h2>
+{% block content %}
+<section class="results-section container">
+    <a class="back-link" href="{% url 'event_detail' event.id %}">← Volver al evento</a>
 
-    {% if poll %}
+    <div class="results-card">
+        <span class="eyebrow">RESULTADOS</span>
+        <h1>{{ event.name }}</h1>
 
-        <h3>{{ poll.question }}</h3>
+        {% if poll %}
+            <h2>{{ poll.question }}</h2>
 
-        {% for choice in choices %}
-
-            <div>
-                <p>
-                    <strong>{{ choice.choice_text }}</strong>
-                </p>
-
-                <p>
-                    {{ choice.votes }} votos -
-                    {{ choice.percentage }}%
-                </p>
+            <div class="results-list">
+                {% for choice in choices %}
+                <div class="result-item">
+                    <div class="result-top">
+                        <strong>{{ choice.choice_text }}</strong>
+                        <span>{{ choice.percentage }}% · {{ choice.votes }} voto{{ choice.votes|pluralize }}</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: {{ choice.percentage }}%;"></div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
 
-            <hr>
-
-        {% endfor %}
-
-        <h3>Total de votos: {{ total_votes }}</h3>
-
-    {% else %}
-
-        <p>Este evento no tiene una encuesta.</p>
-
-    {% endif %}
-
-    <br>
-
-    <a href="{% url 'event_detail' event.id %}">
-        Volver al evento
-    </a>
-
-</body>
-</html>
+            <div class="total-votes">
+                <span>Total de votos</span>
+                <strong>{{ total_votes }}</strong>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h3>Este evento no tiene una encuesta</h3>
+                <p>No existen resultados para mostrar.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
