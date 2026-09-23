@@ -1,0 +1,520 @@
+RÚBRICA BACKEND DJANGO Y DOCUMENTACIÓN DE INTELIGENCIA ARTIFICIAL
+
+Proyecto: Sistema de Venta de Tickets
+Tecnología principal: Django
+Lenguaje: Python
+Versión de Python: 3.11.9
+Versión de Django: 5.2.17
+Fecha de actualización: septiembre de 2026
+
+======================================================================
+ESTADO GENERAL
+==============
+
+Los 12 indicadores considerados en la rúbrica se encuentran implementados
+en el proyecto.
+
+Estado general:
+
+1.1.1 Variables y operaciones              CUMPLIDO
+1.1.2 Instrucciones y estructuras          CUMPLIDO
+1.1.3 Paquetes externos                    CUMPLIDO
+1.1.4 Aplicación Django                   CUMPLIDO
+Indicador 5 - MVC/MVT                     CUMPLIDO
+Indicador 6 - Entorno Django              CUMPLIDO
+Indicador 7 - Modelos Django              CUMPLIDO
+Indicador 8 - Views y Templates            CUMPLIDO
+Indicador 9 - Tecnologías servidor         CUMPLIDO
+Indicador 10 - Inteligencia Artificial     CUMPLIDO
+Indicador 11 - Datos de prueba             CUMPLIDO
+Indicador 12 - Hosting/Protocolos          CUMPLIDO
+
+======================================================================
+
+1. VARIABLES Y OPERACIONES
+   ======================================================================
+
+ESTADO: CUMPLIDO
+
+El proyecto utiliza variables y operaciones propias de Python y Django.
+
+Ejemplos:
+
+* Variables recibidas desde solicitudes HTTP.
+* Identificadores de eventos.
+* Variables utilizadas para almacenar eventos.
+* Variables utilizadas para encuestas.
+* Variables utilizadas para votos.
+* Variables utilizadas para calcular porcentajes.
+* Operaciones aritméticas.
+* Operaciones de comparación.
+* Conversión y manipulación de datos.
+
+En la vista de resultados se utiliza una operación matemática para
+calcular el porcentaje de cada alternativa:
+
+porcentaje = (votos de la alternativa / total de votos) * 100
+
+El resultado se redondea a dos decimales.
+
+También se controla el caso en que total_votes sea igual a cero para
+evitar una división por cero.
+
+======================================================================
+2. INSTRUCCIONES, ESTRUCTURAS Y OPERADORES
+==========================================
+
+ESTADO: CUMPLIDO
+
+El proyecto utiliza estructuras de programación de Python, incluyendo:
+
+* if
+* else
+* for
+* comprobaciones de existencia
+* condiciones
+* operaciones aritméticas
+* operadores de comparación
+* retorno de valores
+* manejo de solicitudes GET y POST
+
+Ejemplo de estructura utilizada en el cálculo de resultados:
+
+if total_votes > 0:
+percentage = round(
+(choice.votes / total_votes) * 100,
+2
+)
+else:
+percentage = 0
+
+También se utilizan ciclos para recorrer las alternativas de una
+encuesta.
+
+======================================================================
+3. PAQUETES EXTERNOS
+====================
+
+ESTADO: CUMPLIDO
+
+El proyecto utiliza paquetes externos además de Django.
+
+Uno de los principales es:
+
+Pillow
+
+Versión utilizada:
+
+12.3.0
+
+Pillow se utiliza para permitir el manejo de imágenes mediante
+ImageField en el modelo Event.
+
+También se utilizan paquetes relacionados con el despliegue:
+
+* dj-database-url
+* psycopg
+* psycopg-binary
+* gunicorn
+* whitenoise
+
+Las dependencias se encuentran documentadas en:
+
+requirements.txt
+
+======================================================================
+4. APLICACIÓN DESARROLLADA CON DJANGO
+=====================================
+
+ESTADO: CUMPLIDO
+
+El proyecto fue desarrollado utilizando Django.
+
+Se crearon las aplicaciones:
+
+* events
+* polls
+
+La aplicación events administra los eventos.
+
+La aplicación polls administra las encuestas y alternativas.
+
+El proyecto posee:
+
+* models.py
+* views.py
+* urls.py
+* templates
+* admin.py
+* migrations
+
+Además, el proyecto utiliza manage.py para administrar la aplicación.
+
+======================================================================
+5. MODELO MVC / MVT
+===================
+
+ESTADO: CUMPLIDO
+
+Django utiliza una arquitectura basada en el patrón MVT
+(Model-View-Template), equivalente funcionalmente al concepto MVC.
+
+En el proyecto:
+
+MODELO:
+
+* Event
+* Poll
+* Choice
+
+VISTA:
+
+* event_list
+* event_detail
+* event_results
+
+TEMPLATE:
+
+* event_list.html
+* event_detail.html
+* event_results.html
+
+URLS:
+
+* Definen las rutas que conectan las solicitudes con las vistas.
+
+Esta separación permite organizar la lógica, los datos y la presentación
+de la aplicación.
+
+======================================================================
+6. CONFIGURACIÓN DEL ENTORNO DJANGO
+===================================
+
+ESTADO: CUMPLIDO
+
+El proyecto fue desarrollado en Python 3.11.9 utilizando un entorno
+virtual de Python.
+
+Entorno:
+
+.venv
+
+El proyecto utiliza Django 5.2.17.
+
+Se realizaron correctamente:
+
+* Instalación de Django.
+* Creación/configuración del proyecto.
+* Configuración de la aplicación events.
+* Configuración de la aplicación polls.
+* Migraciones.
+* Creación de superusuario.
+* Ejecución del servidor.
+* Comprobación mediante manage.py check.
+
+El proyecto puede ejecutarse localmente mediante:
+
+python manage.py runserver
+
+======================================================================
+7. MODELOS DJANGO
+=================
+
+ESTADO: CUMPLIDO
+
+Se implementaron modelos utilizando Django ORM.
+
+MODELO EVENT:
+
+Campos:
+
+* name
+* description
+* date
+* location
+* price
+* capacity
+* image
+
+MODELO POLL:
+
+Campos:
+
+* event
+* question
+
+MODELO CHOICE:
+
+Campos:
+
+* poll
+* choice_text
+* votes
+
+Relaciones:
+
+Event 1 ---- 1 Poll
+
+Poll 1 ---- N Choice
+
+El modelo Event utiliza DecimalField para el precio y ImageField para
+las imágenes.
+
+El modelo Choice utiliza un campo votes para almacenar la cantidad de
+votos recibidos.
+
+Se generaron y aplicaron las migraciones correspondientes.
+
+======================================================================
+8. VIEWS Y TEMPLATES
+====================
+
+ESTADO: CUMPLIDO
+
+Se implementaron vistas para:
+
+* Listado de eventos.
+* Detalle de eventos.
+* Resultados de encuestas.
+
+Vistas principales:
+
+event_list
+event_detail
+event_results
+
+La vista event_detail permite registrar votos mediante solicitudes POST.
+
+La vista event_results calcula y entrega los porcentajes de cada
+alternativa.
+
+Los templates utilizados son:
+
+events/event_list.html
+events/event_detail.html
+events/event_results.html
+
+Los templates utilizan el sistema de plantillas de Django.
+
+También se implementó get_object_or_404 para manejar correctamente
+eventos o recursos que no existen.
+
+======================================================================
+9. TECNOLOGÍAS DEL LADO DEL SERVIDOR
+====================================
+
+ESTADO: CUMPLIDO
+
+El proyecto utiliza tecnologías del lado del servidor mediante Django.
+
+El servidor procesa:
+
+* Solicitudes HTTP.
+* Consultas a la base de datos.
+* Encuestas.
+* Registro de votos.
+* Cálculo de resultados.
+* Renderizado de templates.
+* Administración de sesiones y seguridad proporcionada por Django.
+
+En producción se utiliza:
+
+Gunicorn
+
+para ejecutar la aplicación Django.
+
+La aplicación utiliza PostgreSQL como base de datos de producción.
+
+======================================================================
+10. USO DE INTELIGENCIA ARTIFICIAL
+==================================
+
+ESTADO: CUMPLIDO
+
+Se utilizó Inteligencia Artificial como herramienta de apoyo durante
+el desarrollo.
+
+La IA fue utilizada para:
+
+* Comprender conceptos de Django.
+* Orientar la estructura del proyecto.
+* Apoyar la creación de modelos.
+* Apoyar la creación de views.
+* Apoyar la creación de templates.
+* Detectar y solucionar errores.
+* Orientar la configuración de Pillow.
+* Apoyar la implementación de encuestas.
+* Apoyar el cálculo de porcentajes.
+* Orientar la configuración de producción.
+* Apoyar el despliegue en Railway.
+* Diagnosticar errores de configuración.
+* Crear documentación técnica.
+* Organizar datos de prueba.
+* Revisar el cumplimiento de los indicadores de la rúbrica.
+
+La IA fue utilizada como herramienta de apoyo y explicación.
+Las modificaciones fueron aplicadas, ejecutadas y comprobadas en el
+proyecto.
+
+======================================================================
+11. DATOS DE PRUEBA Y APOYO DE IA
+=================================
+
+ESTADO: CUMPLIDO
+
+Se creó el archivo:
+
+events/seed_data.py
+
+Este archivo permite generar datos de prueba mediante Django ORM.
+
+Se generaron 8 eventos:
+
+1. Festival de Música Santiago
+2. Campeonato de Fútbol
+3. Festival de Rock
+4. Feria Tecnológica
+5. Concierto Nacional
+6. Festival de Cine
+7. Evento de Gaming
+8. Stand Up Comedy
+
+Cada evento cuenta con una encuesta.
+
+Cada encuesta posee cuatro alternativas:
+
+* Excelente
+* Bueno
+* Regular
+* Malo
+
+Los datos fueron utilizados para comprobar:
+
+* Listado de eventos.
+* Detalle de eventos.
+* Encuestas.
+* Registro de votos.
+* Cálculo de porcentajes.
+* Resultados.
+* Funcionamiento de la base de datos.
+
+El uso de Inteligencia Artificial permitió apoyar la planificación y
+generación de los datos de prueba utilizados para validar el sistema.
+
+======================================================================
+12. PROTOCOLOS, HOSTING Y DOMINIO/ACCESO WEB
+============================================
+
+ESTADO: CUMPLIDO
+
+El proyecto fue desplegado en Railway.
+
+Aplicación publicada:
+
+https://proyectobackend-production-6c46.up.railway.app
+
+El proyecto utiliza HTTPS en producción.
+
+Base de datos utilizada en producción:
+
+PostgreSQL
+
+Servidor de aplicación:
+
+Gunicorn
+
+Archivo de ejecución:
+
+Procfile
+
+Contenido:
+
+web: gunicorn config.wsgi:application
+
+Configuraciones de producción utilizadas:
+
+* DEBUG=False
+* SECRET_KEY mediante variable de entorno
+* ALLOWED_HOSTS
+* CSRF_TRUSTED_ORIGINS
+* PostgreSQL
+* HTTPS
+
+La aplicación fue probada directamente en el entorno de producción.
+
+También se verificó el envío de formularios mediante POST y la protección
+CSRF.
+
+======================================================================
+PRUEBAS FINALES REALIZADAS
+==========================
+
+Se realizaron pruebas de funcionamiento en desarrollo y producción.
+
+Pruebas realizadas:
+
+[OK] Servidor Django local.
+[OK] manage.py check.
+[OK] Migraciones.
+[OK] Creación de superusuario.
+[OK] Panel de administración.
+[OK] Listado de eventos.
+[OK] Detalle de eventos.
+[OK] Visualización de imágenes.
+[OK] Encuestas.
+[OK] Envío de votos.
+[OK] Protección CSRF.
+[OK] Resultados de encuestas.
+[OK] Cálculo de porcentajes.
+[OK] Caso sin votos.
+[OK] Datos de prueba.
+[OK] PostgreSQL en producción.
+[OK] Despliegue en Railway.
+[OK] Gunicorn.
+[OK] HTTPS.
+[OK] Aplicación accesible públicamente.
+
+======================================================================
+EVIDENCIA DEL PROYECTO
+======================
+
+Repositorio GitHub:
+
+https://github.com/Tiocore/proyectobackend
+
+Aplicación desplegada:
+
+https://proyectobackend-production-6c46.up.railway.app
+
+La evidencia visual recomendada para la entrega incluye:
+
+1. Página de listado de eventos.
+2. Página de detalle de un evento.
+3. Encuesta asociada a un evento.
+4. Envío de un voto.
+5. Página de resultados mostrando cantidades y porcentajes.
+6. Panel de administración de Django.
+7. Eventos administrados desde Django Admin.
+8. Aplicación funcionando en Railway mediante HTTPS.
+9. Configuración del servicio de producción.
+10. Repositorio GitHub.
+
+======================================================================
+CONCLUSIÓN
+==========
+
+El proyecto cuenta con las funcionalidades necesarias para cumplir los
+12 indicadores considerados en la rúbrica.
+
+Se implementaron modelos, vistas, templates, operaciones, estructuras
+de programación, paquetes externos, datos de prueba, tecnologías de
+servidor, documentación del uso de Inteligencia Artificial y
+despliegue en un servicio de hosting.
+
+El sistema se encuentra funcionando en desarrollo local y en producción.
+
+ESTADO FINAL:
+
+12 INDICADORES: CUMPLIDOS
+
+======================================================================
