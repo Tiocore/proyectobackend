@@ -14,3 +14,4 @@ staticfiles/
 
 # Base de datos local
 db.sqlite3
+db_backup.sqlite3
