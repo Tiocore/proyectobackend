@@ -1,38 +1,44 @@
-# Proyecto Backend Django - Sistema de Venta de Tickets
+# Proyecto Backend - Sistema de Venta de Tickets
 
-## 1. Descripción del proyecto
+Aplicación web backend desarrollada con **Django**, orientada a la gestión y venta de tickets para eventos.
 
-Proyecto backend desarrollado con Django para la gestión y venta de tickets para eventos.
-
-El sistema permite administrar eventos, consultar su información, visualizar imágenes, responder encuestas asociadas a cada evento y consultar los resultados de las encuestas con sus respectivos porcentajes.
-
-El proyecto fue desarrollado como parte de una evaluación de desarrollo backend y contempla desarrollo local, control de versiones, pruebas y despliegue en producción.
+El proyecto incorpora una **API RESTful desarrollada con Django REST Framework (DRF)**, permitiendo administrar eventos, encuestas y opciones de respuesta mediante operaciones HTTP estándar.
 
 ---
 
-## 2. Tecnologías utilizadas
+## 1. Tecnologías utilizadas
 
-* Python 3.11.9
-* Django 5.2.17
-* Pillow 12.3.0
-* HTML5
-* CSS3
-* JavaScript
-* SQLite para desarrollo local
-* PostgreSQL para producción
-* Gunicorn
-* WhiteNoise
-* dj-database-url
-* psycopg
-* Visual Studio Code
-* Git
-* GitHub
-* Railway
-* Inteligencia Artificial como apoyo al desarrollo y documentación
+- Python 3.11+
+- Django 5.2
+- Django REST Framework
+- PostgreSQL
+- HTML5
+- CSS3
+- Git
+- GitHub
 
 ---
 
-## 3. Estructura principal del proyecto
+## 2. Funcionalidades principales
+
+El sistema permite:
+
+- Gestionar eventos.
+- Consultar información de eventos.
+- Crear, modificar y eliminar eventos.
+- Gestionar encuestas asociadas a eventos.
+- Gestionar opciones de respuesta de las encuestas.
+- Registrar y consultar votos mediante la funcionalidad existente del proyecto.
+- Administrar información mediante Django Admin.
+- Utilizar una API RESTful.
+- Utilizar autenticación mediante sesión y token.
+- Controlar permisos para operaciones de lectura y escritura.
+- Entregar respuestas en formato JSON.
+- Utilizar paginación en los endpoints de la API.
+
+---
+
+# 3. Estructura general del proyecto
 
 ```text
 proyectobackend/
@@ -40,274 +46,173 @@ proyectobackend/
 ├── config/
 │   ├── settings.py
 │   ├── urls.py
-│   ├── wsgi.py
-│   └── asgi.py
+│   └── ...
 │
 ├── events/
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── serializers.py
+│   │   ├── views.py
+│   │   └── urls.py
 │   ├── migrations/
 │   ├── templates/
-│   │   └── events/
-│   ├── admin.py
 │   ├── models.py
-│   ├── urls.py
 │   ├── views.py
-│   └── seed_data.py
+│   └── ...
 │
 ├── polls/
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── serializers.py
+│   │   ├── views.py
+│   │   └── urls.py
 │   ├── migrations/
-│   ├── admin.py
 │   ├── models.py
 │   └── ...
 │
-├── media/
-├── staticfiles/
+├── static/
+│
 ├── manage.py
 ├── requirements.txt
-├── Procfile
-├── .gitignore
-└── README.md
+├── README.md
+└── .gitignore
 ```
 
 ---
 
-## 4. Aplicaciones Django
+# 4. Requisitos previos
 
-El proyecto utiliza principalmente dos aplicaciones:
+Antes de ejecutar el proyecto se necesita tener instalado:
 
-### Events
-
-La aplicación `events` administra los eventos disponibles.
-
-Permite:
-
-* Listar eventos.
-* Mostrar información detallada de cada evento.
-* Mostrar nombre.
-* Mostrar descripción.
-* Mostrar fecha.
-* Mostrar ubicación.
-* Mostrar precio.
-* Mostrar capacidad.
-* Mostrar imágenes.
-* Acceder a la encuesta asociada.
-* Acceder a los resultados de la encuesta.
-
-### Polls
-
-La aplicación `polls` administra las encuestas y sus alternativas.
-
-Cada evento puede tener una encuesta asociada y cada encuesta posee diferentes alternativas de respuesta.
+- Python 3.11 o superior.
+- PostgreSQL.
+- Git.
+- Un editor de código, como Visual Studio Code.
 
 ---
 
-## 5. Modelos
+# 5. Clonar el proyecto
 
-### Modelo Event
+Clonar el repositorio:
 
-El modelo `Event` contiene:
+```bash
+git clone https://github.com/Tiocore/proyectobackend.git
+```
 
-* `name`
-* `description`
-* `date`
-* `location`
-* `price`
-* `capacity`
-* `image`
+Ingresar al proyecto:
 
-El campo `price` utiliza `DecimalField` para manejar valores monetarios.
-
-El campo `image` utiliza `ImageField`, permitiendo almacenar imágenes asociadas a los eventos.
-
-### Modelo Poll
-
-El modelo `Poll` contiene:
-
-* `event`
-* `question`
-
-La relación con `Event` utiliza `OneToOneField`.
-
-### Modelo Choice
-
-El modelo `Choice` contiene:
-
-* `poll`
-* `choice_text`
-* `votes`
-
-La relación con `Poll` utiliza `ForeignKey`.
-
-La estructura permite:
-
-```text
-Event
-  │
-  └── Poll
-        │
-        ├── Choice
-        ├── Choice
-        ├── Choice
-        └── Choice
+```bash
+cd proyectobackend
 ```
 
 ---
 
-## 6. Funcionalidades principales
+# 6. Crear el entorno virtual
 
-### Gestión de eventos
+Crear el entorno virtual:
 
-Los eventos pueden ser administrados desde el panel de administración de Django.
-
-El sistema permite crear, modificar y consultar eventos.
-
-### Imágenes
-
-Las imágenes de los eventos son administradas mediante Pillow y Django `ImageField`.
-
-Configuración utilizada:
-
-```python
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
-```
-
-### Encuestas
-
-Cada evento puede tener una encuesta con diferentes alternativas.
-
-El usuario puede seleccionar una alternativa y enviar su voto mediante una solicitud `POST`.
-
-### Resultados
-
-El sistema calcula automáticamente el porcentaje correspondiente a cada alternativa.
-
-La fórmula utilizada es:
-
-```text
-porcentaje = (votos de la alternativa / total de votos) × 100
-```
-
-El resultado se redondea a dos decimales.
-
-También se contempla el caso en que todavía no existan votos, evitando una división por cero.
-
----
-
-## 7. Datos de prueba
-
-El proyecto incluye un script:
-
-```text
-events/seed_data.py
-```
-
-Este script permite generar datos de prueba utilizando `update_or_create`.
-
-Se utilizaron 8 eventos de prueba:
-
-1. Festival de Música Santiago
-2. Campeonato de Fútbol
-3. Festival de Rock
-4. Feria Tecnológica
-5. Concierto Nacional
-6. Festival de Cine
-7. Evento de Gaming
-8. Stand Up Comedy
-
-Cada evento posee una encuesta con cuatro alternativas:
-
-* Excelente
-* Bueno
-* Regular
-* Malo
-
-Los datos fueron utilizados para realizar pruebas de funcionamiento y demostrar el comportamiento del sistema.
-
----
-
-## 8. Panel de administración
-
-Django Admin permite administrar los principales datos del sistema.
-
-Desde:
-
-```text
-/admin/
-```
-
-se pueden gestionar los eventos, encuestas y alternativas.
-
-También se creó un usuario administrador para realizar las pruebas de administración.
-
----
-
-## 9. Configuración del entorno
-
-El proyecto fue desarrollado utilizando un entorno virtual de Python:
-
-```text
-.venv
-```
-
-Python utilizado:
-
-```text
-Python 3.11.9
-```
-
-Django utilizado:
-
-```text
-Django 5.2.17
-```
-
-Las dependencias del proyecto se encuentran en:
-
-```text
-requirements.txt
-```
-
----
-
-## 10. Instalación local
-
-Crear y activar el entorno virtual:
-
-```powershell
+```bash
 python -m venv .venv
 ```
 
-Activar:
+En Windows PowerShell:
 
 ```powershell
 .venv\Scripts\Activate.ps1
 ```
 
-Instalar las dependencias:
+Si el entorno se activó correctamente, aparecerá `(.venv)` al comienzo de la terminal.
 
-```powershell
+---
+
+# 7. Instalar las dependencias
+
+Con el entorno virtual activo:
+
+```bash
 pip install -r requirements.txt
 ```
 
-Aplicar migraciones:
+Entre las dependencias principales se encuentran:
 
-```powershell
+- Django
+- Django REST Framework
+- PostgreSQL
+- Gunicorn
+- Pillow
+- dj-database-url
+
+---
+
+# 8. Configuración de PostgreSQL
+
+El proyecto utiliza **PostgreSQL** como sistema de gestión de base de datos.
+
+La configuración de la conexión debe realizarse mediante variables de entorno y no mediante credenciales escritas directamente en el código fuente.
+
+Ejemplo de variables:
+
+```text
+DB_NAME=nombre_base_datos
+DB_USER=usuario
+DB_PASSWORD=contraseña
+DB_HOST=localhost
+DB_PORT=5432
+```
+
+Los valores reales de las credenciales no deben publicarse en GitHub.
+
+---
+
+# 9. Migraciones
+
+Después de configurar la base de datos:
+
+```bash
+python manage.py makemigrations
+```
+
+Luego:
+
+```bash
 python manage.py migrate
 ```
 
-Crear un superusuario:
+Esto crea y actualiza las tablas necesarias para las aplicaciones del proyecto.
 
-```powershell
+---
+
+# 10. Crear usuario administrador
+
+Para crear un usuario administrador:
+
+```bash
 python manage.py createsuperuser
 ```
 
-Ejecutar el servidor:
+Seguir las instrucciones de Django para establecer:
 
-```powershell
+- nombre de usuario;
+- correo electrónico;
+- contraseña.
+
+El panel administrativo estará disponible en:
+
+```text
+http://127.0.0.1:8000/admin/
+```
+
+---
+
+# 11. Ejecutar el proyecto
+
+Iniciar el servidor:
+
+```bash
 python manage.py runserver
 ```
 
-El proyecto estará disponible localmente en:
+La aplicación estará disponible en:
 
 ```text
 http://127.0.0.1:8000/
@@ -315,163 +220,509 @@ http://127.0.0.1:8000/
 
 ---
 
-## 11. Variables de entorno
+# 12. API REST
 
-Para producción se utilizan variables de entorno para evitar almacenar información sensible directamente en el código.
+El proyecto utiliza **Django REST Framework** para proporcionar una API RESTful.
 
-Entre ellas:
+La API utiliza:
+
+- Serializers.
+- ViewSets.
+- Routers.
+- JSON.
+- Autenticación.
+- Permisos.
+- Paginación.
+- Operaciones CRUD.
+
+La API se encuentra bajo el prefijo:
 
 ```text
-DJANGO_DEBUG
-DJANGO_SECRET_KEY
-DJANGO_ALLOWED_HOSTS
-DJANGO_CSRF_TRUSTED_ORIGINS
-DATABASE_URL
+/api/
 ```
-
-La configuración permite utilizar SQLite durante el desarrollo local y PostgreSQL en producción.
 
 ---
 
-## 12. Base de datos
+# 13. API de Events
 
-### Desarrollo
+## Listar eventos
 
-Durante el desarrollo local se utiliza:
-
-```text
-SQLite
+```http
+GET /api/events/
 ```
 
-### Producción
-
-En producción se utiliza:
-
-```text
-PostgreSQL
-```
-
-La conexión a la base de datos se gestiona mediante `dj-database-url`.
-
-Esto permite que el proyecto utilice una base de datos PostgreSQL proporcionada por el servicio de hosting.
+Obtiene todos los eventos disponibles.
 
 ---
 
-## 13. Despliegue
+## Obtener un evento
 
-El proyecto fue desplegado utilizando Railway.
-
-La aplicación se ejecuta mediante Gunicorn utilizando:
-
-```text
-web: gunicorn config.wsgi:application
+```http
+GET /api/events/<id>/
 ```
 
-Archivo utilizado:
+Ejemplo:
 
-```text
-Procfile
+```http
+GET /api/events/1/
 ```
-
-La aplicación se encuentra publicada en:
-
-```text
-https://proyectobackend-production-6c46.up.railway.app
-```
-
-El proyecto utiliza HTTPS en producción.
 
 ---
 
-## 14. Archivos estáticos
+## Crear un evento
 
-Para administrar los archivos estáticos en producción se utiliza WhiteNoise.
+```http
+POST /api/events/
+```
 
-Configuración principal:
+Ejemplo:
+
+```json
+{
+    "name": "Nuevo Evento",
+    "description": "Descripción del evento",
+    "date": "2026-11-15T18:00:00Z",
+    "location": "Parque O'Higgins",
+    "price": "2500.00",
+    "capacity": 500,
+    "image": null
+}
+```
+
+---
+
+## Actualizar completamente un evento
+
+```http
+PUT /api/events/<id>/
+```
+
+---
+
+## Actualizar parcialmente un evento
+
+```http
+PATCH /api/events/<id>/
+```
+
+Ejemplo:
+
+```json
+{
+    "price": "3000.00"
+}
+```
+
+---
+
+## Eliminar un evento
+
+```http
+DELETE /api/events/<id>/
+```
+
+Una eliminación exitosa devuelve:
+
+```text
+204 No Content
+```
+
+---
+
+# 14. API de Polls
+
+Las encuestas están relacionadas con los eventos mediante una relación `OneToOne`.
+
+## Listar encuestas
+
+```http
+GET /api/polls/
+```
+
+---
+
+## Obtener una encuesta
+
+```http
+GET /api/polls/<id>/
+```
+
+---
+
+## Crear una encuesta
+
+```http
+POST /api/polls/
+```
+
+Ejemplo:
+
+```json
+{
+    "event": 1,
+    "question": "¿Qué te pareció este evento?"
+}
+```
+
+Un evento solamente puede tener una encuesta asociada.
+
+---
+
+## Actualizar completamente una encuesta
+
+```http
+PUT /api/polls/<id>/
+```
+
+---
+
+## Actualizar parcialmente una encuesta
+
+```http
+PATCH /api/polls/<id>/
+```
+
+Ejemplo:
+
+```json
+{
+    "question": "¿Qué opinas de la experiencia del evento?"
+}
+```
+
+---
+
+## Eliminar una encuesta
+
+```http
+DELETE /api/polls/<id>/
+```
+
+Respuesta esperada:
+
+```text
+204 No Content
+```
+
+---
+
+# 15. API de Choices
+
+Las opciones pertenecen a una encuesta mediante una relación `ForeignKey`.
+
+## Listar opciones
+
+```http
+GET /api/choices/
+```
+
+---
+
+## Obtener una opción
+
+```http
+GET /api/choices/<id>/
+```
+
+---
+
+## Crear una opción
+
+```http
+POST /api/choices/
+```
+
+Ejemplo:
+
+```json
+{
+    "poll": 1,
+    "choice_text": "Excelente"
+}
+```
+
+El campo `votes` se genera automáticamente con valor inicial `0`.
+
+---
+
+## Actualizar completamente una opción
+
+```http
+PUT /api/choices/<id>/
+```
+
+---
+
+## Actualizar parcialmente una opción
+
+```http
+PATCH /api/choices/<id>/
+```
+
+Ejemplo:
+
+```json
+{
+    "choice_text": "Muy buena"
+}
+```
+
+---
+
+## Eliminar una opción
+
+```http
+DELETE /api/choices/<id>/
+```
+
+Respuesta esperada:
+
+```text
+204 No Content
+```
+
+---
+
+# 16. Resumen de endpoints
+
+| Método | Endpoint | Función |
+|---|---|---|
+| GET | `/api/events/` | Listar eventos |
+| POST | `/api/events/` | Crear evento |
+| GET | `/api/events/<id>/` | Obtener evento |
+| PUT | `/api/events/<id>/` | Actualizar evento |
+| PATCH | `/api/events/<id>/` | Actualizar parcialmente |
+| DELETE | `/api/events/<id>/` | Eliminar evento |
+| GET | `/api/polls/` | Listar encuestas |
+| POST | `/api/polls/` | Crear encuesta |
+| GET | `/api/polls/<id>/` | Obtener encuesta |
+| PUT | `/api/polls/<id>/` | Actualizar encuesta |
+| PATCH | `/api/polls/<id>/` | Actualizar parcialmente |
+| DELETE | `/api/polls/<id>/` | Eliminar encuesta |
+| GET | `/api/choices/` | Listar opciones |
+| POST | `/api/choices/` | Crear opción |
+| GET | `/api/choices/<id>/` | Obtener opción |
+| PUT | `/api/choices/<id>/` | Actualizar opción |
+| PATCH | `/api/choices/<id>/` | Actualizar parcialmente |
+| DELETE | `/api/choices/<id>/` | Eliminar opción |
+
+---
+
+# 17. Autenticación
+
+La API utiliza dos mecanismos de autenticación:
+
+- Session Authentication.
+- Token Authentication.
+
+La configuración se encuentra en `config/settings.py`.
+
+Las operaciones de lectura son públicas, mientras que las operaciones de modificación requieren autenticación según los permisos configurados.
+
+---
+
+# 18. Autenticación mediante Token
+
+Para obtener un token se puede utilizar:
+
+```http
+POST /api-token-auth/
+```
+
+Ejemplo:
+
+```json
+{
+    "username": "usuario",
+    "password": "contraseña"
+}
+```
+
+La respuesta contiene:
+
+```json
+{
+    "token": "..."
+}
+```
+
+El token debe enviarse en las peticiones protegidas mediante:
+
+```http
+Authorization: Token TU_TOKEN
+```
+
+Los tokens deben mantenerse privados y nunca deben publicarse en el repositorio.
+
+---
+
+# 19. Autenticación mediante sesión
+
+Django REST Framework también proporciona autenticación mediante sesión.
+
+El acceso está disponible mediante:
+
+```text
+http://127.0.0.1:8000/api-auth/login/
+```
+
+Esta opción permite utilizar la interfaz navegable de Django REST Framework durante el desarrollo.
+
+---
+
+# 20. Permisos
+
+La API utiliza:
 
 ```python
-STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+IsAuthenticatedOrReadOnly
 ```
 
-Se ejecutó:
+Esto significa que:
 
-```powershell
-python manage.py collectstatic --noinput
+- Las peticiones `GET` pueden realizarse sin autenticación.
+- Las operaciones de escritura requieren autenticación.
+
+Las operaciones protegidas incluyen:
+
+```text
+POST
+PUT
+PATCH
+DELETE
 ```
 
-para preparar los archivos estáticos para producción.
+---
+
+# 21. Respuestas JSON
+
+Los endpoints de la API utilizan JSON como formato principal de respuesta.
+
+Ejemplo:
+
+```json
+{
+    "id": 1,
+    "name": "Festival de Música",
+    "description": "Evento musical",
+    "date": "2026-10-29T16:30:00Z",
+    "location": "Santiago",
+    "price": "1000.00",
+    "capacity": 300,
+    "image": null
+}
+```
 
 ---
 
-## 15. Seguridad y producción
+# 22. Paginación
 
-La configuración de producción utiliza:
+La API utiliza paginación mediante:
 
-* `DEBUG=False`
-* Variable de entorno para `SECRET_KEY`
-* `ALLOWED_HOSTS`
-* `CSRF_TRUSTED_ORIGINS`
-* HTTPS
-* PostgreSQL
-* Gunicorn
-* WhiteNoise
+```python
+PageNumberPagination
+```
 
-La configuración CSRF permite realizar correctamente las solicitudes POST desde el dominio de producción.
+con un máximo de:
 
----
+```text
+10 registros por página
+```
 
-## 16. Pruebas realizadas
+Cuando existen suficientes registros, la respuesta puede incluir:
 
-Se realizaron pruebas de:
-
-* Inicio del servidor Django.
-* Comprobación del proyecto mediante `manage.py check`.
-* Aplicación de migraciones.
-* Creación de superusuario.
-* Acceso al panel de administración.
-* Visualización de eventos.
-* Visualización del detalle de eventos.
-* Visualización de imágenes.
-* Visualización de encuestas.
-* Envío de votos mediante POST.
-* Protección CSRF.
-* Visualización de resultados.
-* Cálculo de porcentajes.
-* Caso sin votos.
-* Uso de datos de prueba.
-* Funcionamiento de la aplicación desplegada en Railway.
-* Conexión con PostgreSQL en producción.
-* Acceso mediante HTTPS.
+```json
+{
+    "count": 20,
+    "next": "...",
+    "previous": null,
+    "results": []
+}
+```
 
 ---
 
-## 17. Uso de Inteligencia Artificial
+# 23. Validaciones y manejo de errores
 
-Se utilizó Inteligencia Artificial como herramienta de apoyo durante el desarrollo del proyecto.
+Django REST Framework permite validar automáticamente los datos recibidos mediante los serializers y los modelos de Django.
 
-La IA fue utilizada principalmente para:
+Ante datos inválidos, la API devuelve:
 
-* Orientación sobre la estructura de Django.
-* Explicación de conceptos de Python y Django.
-* Apoyo en la creación y corrección de modelos.
-* Apoyo en la creación de vistas y templates.
-* Orientación para configurar imágenes con Pillow.
-* Apoyo en la creación de encuestas y resultados.
-* Corrección del cálculo de porcentajes.
-* Orientación para configurar variables de entorno.
-* Apoyo durante el despliegue en Railway.
-* Diagnóstico de errores.
-* Elaboración de documentación.
-* Generación y organización de datos de prueba.
+```text
+400 Bad Request
+```
 
-La implementación, ejecución de comandos, pruebas y validación final fueron realizadas sobre el proyecto.
+Los recursos inexistentes devuelven:
+
+```text
+404 Not Found
+```
+
+Una eliminación exitosa devuelve:
+
+```text
+204 No Content
+```
+
+Las operaciones que requieren autenticación pueden devolver:
+
+```text
+401 Unauthorized
+```
+
+o:
+
+```text
+403 Forbidden
+```
+
+dependiendo del mecanismo de autenticación utilizado.
 
 ---
 
-## 18. Control de versiones
+# 24. Seguridad
 
-El proyecto utiliza Git para el control de versiones y GitHub como repositorio remoto.
+Se aplican las siguientes recomendaciones:
+
+- Las credenciales de PostgreSQL no deben almacenarse directamente en el código.
+- Las variables sensibles deben mantenerse en variables de entorno.
+- El archivo `.env` está excluido mediante `.gitignore`.
+- Los tokens de autenticación no deben compartirse públicamente.
+- `SECRET_KEY` debe mantenerse protegida.
+- En producción se recomienda utilizar HTTPS.
+- `ALLOWED_HOSTS` debe configurarse correctamente.
+- `CSRF_TRUSTED_ORIGINS` debe configurarse para los dominios que correspondan.
+- Las dependencias deben mantenerse actualizadas.
+- No se deben subir bases de datos locales o archivos sensibles al repositorio.
+
+---
+
+# 25. Comprobación del proyecto
+
+Para verificar que la configuración de Django no tenga errores:
+
+```bash
+python manage.py check
+```
+
+El resultado esperado es:
+
+```text
+System check identified no issues (0 silenced).
+```
+
+Para comprobar las migraciones:
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+---
+
+# 26. Git y GitHub
+
+El proyecto utiliza Git para el control de versiones y GitHub para almacenar el código fuente.
 
 Repositorio:
 
@@ -479,57 +730,110 @@ Repositorio:
 https://github.com/Tiocore/proyectobackend
 ```
 
-Los avances importantes fueron registrados mediante commits y enviados al repositorio remoto utilizando:
+Comandos principales:
 
-```powershell
+```bash
+git status
 git add .
-git commit -m "mensaje"
-git push
+git commit -m "Descripción del cambio"
+git push origin main
 ```
 
 ---
 
-## 19. Cumplimiento de la rúbrica
+# 27. Archivos excluidos del repositorio
 
-El proyecto contempla los 12 indicadores evaluados:
+El proyecto utiliza `.gitignore` para evitar subir archivos innecesarios o sensibles.
 
-1. Variables y operaciones.
-2. Instrucciones, estructuras y operadores.
-3. Utilización de paquetes externos.
-4. Aplicación desarrollada con Django.
-5. Arquitectura MVT/MVC.
-6. Configuración del entorno Django.
-7. Utilización de modelos.
-8. Views y templates.
-9. Tecnologías del lado del servidor.
-10. Uso documentado de Inteligencia Artificial.
-11. Generación y utilización de datos de prueba con apoyo de IA.
-12. Protocolos, hosting y dominio/acceso web.
-
-La evidencia y explicación de cada indicador se encuentran en:
+Entre ellos:
 
 ```text
-RUBRICA_BACKEND_Y_DOCUMENTACION_IA.txt
+.venv/
+__pycache__/
+*.py[cod]
+.env
+db.sqlite3
+staticfiles/
 ```
 
 ---
 
-## 20. Estado final
+# 28. Despliegue
 
-El proyecto se encuentra funcional tanto en desarrollo local como en producción.
+El proyecto fue preparado para ejecutarse en un entorno de producción utilizando las configuraciones correspondientes de Django y PostgreSQL.
 
-Actualmente permite gestionar eventos, mostrar información e imágenes, realizar encuestas, registrar votos, calcular porcentajes y consultar resultados.
+Para producción se deben configurar correctamente:
 
-La aplicación se encuentra desplegada mediante Railway, utiliza PostgreSQL en producción y dispone de acceso mediante HTTPS.
+- Variables de entorno.
+- Base de datos PostgreSQL.
+- `ALLOWED_HOSTS`.
+- `CSRF_TRUSTED_ORIGINS`.
+- `SECRET_KEY`.
+- HTTPS.
+- Archivos estáticos.
+- Servidor WSGI.
 
-Repositorio:
+---
+
+# 29. Objetivo académico
+
+El proyecto tiene como objetivo aplicar conceptos de desarrollo backend utilizando Django y desarrollar una API RESTful funcional mediante Django REST Framework.
+
+Se implementaron:
+
+- Arquitectura basada en Django.
+- Modelos y relaciones.
+- Persistencia mediante PostgreSQL.
+- Operaciones CRUD.
+- API REST.
+- Serialización de datos.
+- Autenticación.
+- Autorización.
+- Validación de datos.
+- Manejo de errores HTTP.
+- JSON.
+- Paginación.
+- Control de versiones mediante Git.
+- Documentación del proyecto.
+
+---
+
+# 30. Estado del proyecto
+
+Actualmente el proyecto cuenta con:
 
 ```text
-https://github.com/Tiocore/proyectobackend
+✓ Django configurado
+✓ PostgreSQL configurado
+✓ Eventos funcionando
+✓ Encuestas funcionando
+✓ Opciones funcionando
+✓ API REST implementada
+✓ CRUD de Events
+✓ CRUD de Polls
+✓ CRUD de Choices
+✓ GET
+✓ POST
+✓ PUT
+✓ PATCH
+✓ DELETE
+✓ JSON
+✓ Serializers
+✓ ViewSets
+✓ Routers
+✓ Paginación
+✓ Token Authentication
+✓ Session Authentication
+✓ Permisos
+✓ Validaciones
+✓ Manejo de errores
+✓ README documentado
+✓ Git configurado
+✓ Proyecto publicado en GitHub
 ```
 
-Aplicación:
+---
 
-```text
-https://proyectobackend-production-6c46.up.railway.app
-```
+## Autor
+
+Proyecto desarrollado como parte del aprendizaje y aplicación práctica de tecnologías backend con **Python, Django, Django REST Framework y PostgreSQL**.
